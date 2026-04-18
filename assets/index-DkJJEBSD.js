@@ -1,0 +1,15 @@
+(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=`dfe27bf9257f8f56354bdabf16017ea4`,t=`https://api.themoviedb.org/3`,n=`https://image.tmdb.org/t/p/w500`,r=1,i=``,a=document.getElementById(`movies-grid`),o=document.getElementById(`searchInput`),s=document.getElementById(`autocomplete-results`),c=document.getElementById(`prevPage`),l=document.getElementById(`nextPage`),u=document.getElementById(`currentPage`);async function d(n=1,r=``){try{let i=r?`${t}/search/movie?api_key=${e}&language=es-ES&query=${r}&page=${n}`:`${t}/movie/popular?api_key=${e}&language=es-ES&page=${n}`;f((await(await fetch(i)).json()).results.slice(0,12))}catch(e){console.error(`Error al cargar películas:`,e)}}function f(e){a.innerHTML=``,e.forEach(e=>{let t=`
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="${e.poster_path?n+e.poster_path:`https://via.placeholder.com/500x750?text=No+Image`}" 
+                         class="card-img-top" alt="${e.title}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="rating-badge">★ ${e.vote_average.toFixed(1)}</span>
+                        </div>
+                        <h5 class="card-title">${e.title}</h5>
+                        <p class="card-text">${e.overview||`Sin descripción disponible.`}</p>
+                    </div>
+                </div>
+            </div>
+        `;a.innerHTML+=t})}o.addEventListener(`input`,async n=>{let r=n.target.value;r.length>2?p((await(await fetch(`${t}/search/movie?api_key=${e}&language=es-ES&query=${r}`)).json()).results.slice(0,5)):(s.innerHTML=``,r.length===0&&(i=``,d(1)))});function p(e){s.innerHTML=``,e.forEach(e=>{let t=document.createElement(`div`);t.classList.add(`autocomplete-item`),t.innerHTML=e.title,t.addEventListener(`click`,()=>{o.value=e.title,i=e.title,s.innerHTML=``,r=1,d(1,e.title)}),s.appendChild(t)})}c.addEventListener(`click`,()=>{r>1&&(r--,m())}),l.addEventListener(`click`,()=>{r++,m()});function m(){d(r,i),u.innerText=`Página ${r}`,window.scrollTo({top:0,behavior:`smooth`})}d();
