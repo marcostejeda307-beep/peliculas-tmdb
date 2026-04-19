@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/peliculas-tmdb/', // Aquí pones el nombre de tu repositorio
+  // Al usar './' (con punto), funcionará tanto en GitHub Pages como en Vercel
+  base: './', 
 })
